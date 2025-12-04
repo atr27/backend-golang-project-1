@@ -1,0 +1,2065 @@
+basePath: /
+definitions:
+  github_com_hospital-emr_backend_internal_common_errors.AppError:
+    properties:
+      code:
+        type: string
+      details: {}
+      message:
+        type: string
+      status_code:
+        type: integer
+    type: object
+  github_com_hospital-emr_backend_internal_models.Allergy:
+    properties:
+      allergen:
+        type: string
+      allergy_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.AllergyType'
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: string
+      notes:
+        type: string
+      onset_date:
+        type: string
+      patient_id:
+        type: string
+      reaction:
+        type: string
+      severity:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.AllergySeverity'
+      status:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.AllergySeverity:
+    enum:
+    - mild
+    - moderate
+    - severe
+    - fatal
+    type: string
+    x-enum-varnames:
+    - AllergySeverityMild
+    - AllergySeverityModerate
+    - AllergySeveritySevere
+    - AllergySeverityFatal
+  github_com_hospital-emr_backend_internal_models.AllergyType:
+    enum:
+    - drug
+    - food
+    - environment
+    - other
+    type: string
+    x-enum-varnames:
+    - AllergyTypeDrug
+    - AllergyTypeFood
+    - AllergyTypeEnvironment
+    - AllergyTypeOther
+  github_com_hospital-emr_backend_internal_models.Appointment:
+    properties:
+      appointment_number:
+        type: string
+      appointment_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.AppointmentType'
+      cancellation_reason:
+        type: string
+      cancelled_at:
+        type: string
+      checked_in_at:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        type: string
+      duration:
+        description: in minutes
+        type: integer
+      end_time:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      notes:
+        type: string
+      patient:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Patient'
+      patient_id:
+        type: string
+      provider:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.User'
+      provider_id:
+        type: string
+      reason_for_visit:
+        type: string
+      reminder_sent:
+        type: boolean
+      reminder_sent_at:
+        type: string
+      room:
+        type: string
+      start_time:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.AppointmentStatus'
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.AppointmentStatus:
+    enum:
+    - scheduled
+    - confirmed
+    - checked_in
+    - in_progress
+    - completed
+    - cancelled
+    - no_show
+    type: string
+    x-enum-varnames:
+    - AppointmentStatusScheduled
+    - AppointmentStatusConfirmed
+    - AppointmentStatusCheckedIn
+    - AppointmentStatusInProgress
+    - AppointmentStatusCompleted
+    - AppointmentStatusCancelled
+    - AppointmentStatusNoShow
+  github_com_hospital-emr_backend_internal_models.AppointmentType:
+    enum:
+    - consultation
+    - follow_up
+    - wellness
+    - procedure
+    - emergency
+    - telehealth
+    type: string
+    x-enum-varnames:
+    - AppointmentTypeConsultation
+    - AppointmentTypeFollowUp
+    - AppointmentTypeWellness
+    - AppointmentTypeProcedure
+    - AppointmentTypeEmergency
+    - AppointmentTypeTelehealth
+  github_com_hospital-emr_backend_internal_models.ClinicalNote:
+    properties:
+      assessment:
+        description: A - Assessment
+        type: string
+      author:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.User'
+      author_id:
+        type: string
+      content:
+        description: General content
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      encounter_id:
+        type: string
+      id:
+        type: string
+      note_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.NoteType'
+      objective:
+        description: O - Objective
+        type: string
+      plan:
+        description: P - Plan
+        type: string
+      signed_at:
+        type: string
+      signed_by:
+        type: string
+      subjective:
+        description: S - Subjective
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.Diagnosis:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      diagnosed_by:
+        type: string
+      diagnosis_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.DiagnosisType'
+      encounter_id:
+        type: string
+      icd10_code:
+        type: string
+      id:
+        type: string
+      notes:
+        type: string
+      onset_date:
+        type: string
+      resolved_date:
+        type: string
+      severity:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.DiagnosisType:
+    enum:
+    - primary
+    - secondary
+    - differential
+    type: string
+    x-enum-varnames:
+    - DiagnosisTypePrimary
+    - DiagnosisTypeSecondary
+    - DiagnosisTypeDifferential
+  github_com_hospital-emr_backend_internal_models.EmergencyContact:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      relationship:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.Encounter:
+    properties:
+      admission_date:
+        type: string
+      chief_complaint:
+        type: string
+      clinical_notes:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.ClinicalNote'
+        type: array
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        type: string
+      diagnoses:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Diagnosis'
+        type: array
+      discharge_date:
+        type: string
+      encounter_number:
+        type: string
+      encounter_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.EncounterType'
+      id:
+        type: string
+      location:
+        type: string
+      orders:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Order'
+        type: array
+      patient:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Patient'
+      patient_id:
+        type: string
+      priority:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Priority'
+      procedures:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Procedure'
+        type: array
+      provider:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.User'
+      provider_id:
+        type: string
+      reason_for_visit:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.EncounterStatus'
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      vital_signs:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.VitalSign'
+        type: array
+    type: object
+  github_com_hospital-emr_backend_internal_models.EncounterStatus:
+    enum:
+    - scheduled
+    - in_progress
+    - completed
+    - cancelled
+    type: string
+    x-enum-varnames:
+    - EncounterStatusScheduled
+    - EncounterStatusInProgress
+    - EncounterStatusCompleted
+    - EncounterStatusCancelled
+  github_com_hospital-emr_backend_internal_models.EncounterType:
+    enum:
+    - outpatient
+    - inpatient
+    - emergency
+    - wellness
+    - telehealth
+    type: string
+    x-enum-varnames:
+    - EncounterTypeOutpatient
+    - EncounterTypeInpatient
+    - EncounterTypeEmergency
+    - EncounterTypeWellness
+    - EncounterTypeTelehealth
+  github_com_hospital-emr_backend_internal_models.Gender:
+    enum:
+    - male
+    - female
+    - other
+    - unknown
+    type: string
+    x-enum-varnames:
+    - GenderMale
+    - GenderFemale
+    - GenderOther
+    - GenderUnknown
+  github_com_hospital-emr_backend_internal_models.Insurance:
+    properties:
+      coverage_type:
+        type: string
+      expiry_date:
+        type: string
+      group_number:
+        type: string
+      policy_number:
+        type: string
+      primary_insured:
+        type: string
+      provider:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.LabResult:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      flag:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.ResultFlag'
+      id:
+        type: string
+      lab_test_id:
+        type: string
+      notes:
+        type: string
+      parameter_name:
+        type: string
+      reference_range:
+        type: string
+      unit:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      value:
+        type: string
+      verified_at:
+        type: string
+      verified_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.LabTest:
+    properties:
+      category:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: string
+      order_id:
+        type: string
+      results:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.LabResult'
+        type: array
+      results_available_at:
+        type: string
+      sample_collected_at:
+        type: string
+      sample_type:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.OrderStatus'
+      test_code:
+        description: LOINC code
+        type: string
+      test_name:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.MaritalStatus:
+    enum:
+    - single
+    - married
+    - divorced
+    - widowed
+    type: string
+    x-enum-varnames:
+    - MaritalStatusSingle
+    - MaritalStatusMarried
+    - MaritalStatusDivorced
+    - MaritalStatusWidowed
+  github_com_hospital-emr_backend_internal_models.Medication:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dosage:
+        type: string
+      end_date:
+        type: string
+      frequency:
+        type: string
+      generic_name:
+        type: string
+      id:
+        type: string
+      instructions:
+        type: string
+      medication_name:
+        type: string
+      patient_id:
+        type: string
+      prescribed_by:
+        type: string
+      reason:
+        type: string
+      refills_remaining:
+        type: integer
+      route:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.NoteType:
+    enum:
+    - soap
+    - progress
+    - consult
+    - discharge
+    - procedure
+    type: string
+    x-enum-varnames:
+    - NoteTypeSOAP
+    - NoteTypeProgress
+    - NoteTypeConsult
+    - NoteTypeDischarge
+    - NoteTypeProcedure
+  github_com_hospital-emr_backend_internal_models.Order:
+    properties:
+      cancel_reason:
+        type: string
+      cancelled_at:
+        type: string
+      clinical_notes:
+        type: string
+      completed_at:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      encounter:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Encounter'
+      encounter_id:
+        type: string
+      id:
+        type: string
+      instructions:
+        type: string
+      lab_tests:
+        description: Lab Order specific fields
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.LabTest'
+        type: array
+      order_number:
+        type: string
+      order_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.OrderType'
+      ordered_at:
+        type: string
+      ordered_by:
+        type: string
+      patient:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Patient'
+      patient_id:
+        type: string
+      prescriptions:
+        description: Prescription specific fields
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Prescription'
+        type: array
+      priority:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Priority'
+      radiology_exams:
+        description: Radiology Order specific fields
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.RadiologyExam'
+        type: array
+      scheduled_for:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.OrderStatus'
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.OrderStatus:
+    enum:
+    - pending
+    - scheduled
+    - in_progress
+    - completed
+    - cancelled
+    - on_hold
+    type: string
+    x-enum-varnames:
+    - OrderStatusPending
+    - OrderStatusScheduled
+    - OrderStatusInProgress
+    - OrderStatusCompleted
+    - OrderStatusCancelled
+    - OrderStatusOnHold
+  github_com_hospital-emr_backend_internal_models.OrderType:
+    enum:
+    - lab
+    - radiology
+    - prescription
+    - procedure
+    type: string
+    x-enum-varnames:
+    - OrderTypeLab
+    - OrderTypeRadiology
+    - OrderTypePrescription
+    - OrderTypeProcedure
+  github_com_hospital-emr_backend_internal_models.Patient:
+    properties:
+      address:
+        type: string
+      allergies:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Allergy'
+        type: array
+      appointments:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Appointment'
+        type: array
+      blood_type:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      date_of_birth:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      emergency_contact:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.EmergencyContact'
+      encounters:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Encounter'
+        type: array
+      first_name:
+        type: string
+      gender:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Gender'
+      id:
+        type: string
+      insurance:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Insurance'
+      language:
+        type: string
+      last_name:
+        type: string
+      marital_status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.MaritalStatus'
+      medications:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Medication'
+        type: array
+      middle_name:
+        type: string
+      mobile_number:
+        type: string
+      mrn:
+        description: Medical Record Number
+        type: string
+      nationality:
+        type: string
+      occupation:
+        type: string
+      passport_number:
+        type: string
+      phone_number:
+        type: string
+      profile_photo:
+        type: string
+      religion:
+        type: string
+      ssn:
+        description: Social Security Number / National ID
+        type: string
+      state:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.PatientStatus'
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      zip_code:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.PatientStatus:
+    enum:
+    - active
+    - inactive
+    - deceased
+    type: string
+    x-enum-varnames:
+    - PatientStatusActive
+    - PatientStatusInactive
+    - PatientStatusDeceased
+  github_com_hospital-emr_backend_internal_models.Permission:
+    properties:
+      action:
+        type: string
+      code:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      resource:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.Prescription:
+    properties:
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dispensed_at:
+        type: string
+      dispensed_by:
+        type: string
+      dosage:
+        type: string
+      drug_code:
+        description: RxNorm code
+        type: string
+      duration:
+        type: string
+      end_date:
+        type: string
+      frequency:
+        type: string
+      generic_name:
+        type: string
+      id:
+        type: string
+      instructions:
+        type: string
+      medication_name:
+        type: string
+      order_id:
+        type: string
+      pharmacy_id:
+        type: string
+      prescribed_at:
+        type: string
+      quantity:
+        type: integer
+      refills:
+        type: integer
+      route:
+        type: string
+      start_date:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.PrescriptionStatus'
+      unit:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.PrescriptionStatus:
+    enum:
+    - pending
+    - active
+    - dispensed
+    - completed
+    - cancelled
+    - expired
+    type: string
+    x-enum-varnames:
+    - PrescriptionStatusPending
+    - PrescriptionStatusActive
+    - PrescriptionStatusDispensed
+    - PrescriptionStatusCompleted
+    - PrescriptionStatusCancelled
+    - PrescriptionStatusExpired
+  github_com_hospital-emr_backend_internal_models.Priority:
+    enum:
+    - routine
+    - urgent
+    - emergent
+    type: string
+    x-enum-varnames:
+    - PriorityRoutine
+    - PriorityUrgent
+    - PriorityEmergent
+  github_com_hospital-emr_backend_internal_models.Procedure:
+    properties:
+      complications:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      duration:
+        description: in minutes
+        type: integer
+      encounter_id:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      notes:
+        type: string
+      performed_at:
+        type: string
+      performed_by:
+        type: string
+      procedure_code:
+        description: CPT code
+        type: string
+      procedure_name:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.RadiologyExam:
+    properties:
+      body_part:
+        type: string
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dicom_study_uid:
+        type: string
+      exam_code:
+        description: CPT code
+        type: string
+      exam_name:
+        type: string
+      findings:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      impression:
+        type: string
+      modality:
+        description: X-Ray, CT, MRI, Ultrasound
+        type: string
+      order_id:
+        type: string
+      performed_at:
+        type: string
+      radiologist:
+        type: string
+      reported_at:
+        type: string
+      scheduled_at:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.OrderStatus'
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.ResultFlag:
+    enum:
+    - normal
+    - high
+    - low
+    - critical
+    - abnormal
+    type: string
+    x-enum-varnames:
+    - ResultFlagNormal
+    - ResultFlagHigh
+    - ResultFlagLow
+    - ResultFlagCritical
+    - ResultFlagAbnormal
+  github_com_hospital-emr_backend_internal_models.Role:
+    properties:
+      code:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      description:
+        type: string
+      id:
+        type: string
+      is_active:
+        type: boolean
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Permission'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.User:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      department:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_login_at:
+        type: string
+      last_login_ip:
+        type: string
+      last_name:
+        type: string
+      license_number:
+        type: string
+      mfa_enabled:
+        type: boolean
+      password_expiry:
+        type: string
+      phone_number:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Role'
+        type: array
+      specialty:
+        type: string
+      status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.UserStatus'
+      updated_at:
+        type: string
+    type: object
+  github_com_hospital-emr_backend_internal_models.UserStatus:
+    enum:
+    - active
+    - inactive
+    - suspended
+    - locked
+    type: string
+    x-enum-varnames:
+    - UserStatusActive
+    - UserStatusInactive
+    - UserStatusSuspended
+    - UserStatusLocked
+  github_com_hospital-emr_backend_internal_models.VitalSign:
+    properties:
+      blood_pressure_diastolic:
+        description: mmHg
+        type: integer
+      blood_pressure_systolic:
+        description: mmHg
+        type: integer
+      bmi:
+        type: number
+      created_at:
+        type: string
+      created_by:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      encounter_id:
+        type: string
+      heart_rate:
+        description: bpm
+        type: integer
+      height:
+        description: cm
+        type: number
+      id:
+        type: string
+      measured_at:
+        type: string
+      notes:
+        type: string
+      oxygen_saturation:
+        description: '%'
+        type: number
+      pain:
+        description: 0-10 scale
+        type: integer
+      patient_id:
+        type: string
+      recorded_by:
+        type: string
+      respiratory_rate:
+        description: breaths/min
+        type: integer
+      temperature:
+        description: Celsius
+        type: number
+      temperature_unit:
+        type: string
+      updated_at:
+        type: string
+      updated_by:
+        type: string
+      weight:
+        description: kg
+        type: number
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  internal_auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      mfa_code:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  internal_auth.LoginResponse:
+    properties:
+      access_token:
+        type: string
+      expires_in:
+        type: integer
+      mfa_required:
+        type: boolean
+      refresh_token:
+        type: string
+      user:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.User'
+    type: object
+  internal_encounter.AddClinicalNoteRequest:
+    properties:
+      assessment:
+        type: string
+      content:
+        type: string
+      note_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.NoteType'
+      objective:
+        type: string
+      plan:
+        type: string
+      subjective:
+        type: string
+    required:
+    - note_type
+    type: object
+  internal_encounter.AddDiagnosisRequest:
+    properties:
+      description:
+        type: string
+      diagnosis_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.DiagnosisType'
+      icd10_code:
+        type: string
+      notes:
+        type: string
+      onset_date:
+        type: string
+      severity:
+        type: string
+    required:
+    - description
+    - diagnosis_type
+    - icd10_code
+    type: object
+  internal_encounter.CreateEncounterRequest:
+    properties:
+      admission_date:
+        type: string
+      chief_complaint:
+        type: string
+      department:
+        type: string
+      encounter_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.EncounterType'
+      location:
+        type: string
+      patient_id:
+        type: string
+      priority:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Priority'
+      provider_id:
+        type: string
+      reason_for_visit:
+        type: string
+    required:
+    - admission_date
+    - encounter_type
+    - patient_id
+    - provider_id
+    type: object
+  internal_encounter.RecordVitalSignsRequest:
+    properties:
+      blood_pressure_diastolic:
+        type: integer
+      blood_pressure_systolic:
+        type: integer
+      heart_rate:
+        type: integer
+      height:
+        type: number
+      notes:
+        type: string
+      oxygen_saturation:
+        type: number
+      pain:
+        type: integer
+      respiratory_rate:
+        type: integer
+      temperature:
+        type: number
+      temperature_unit:
+        type: string
+      weight:
+        type: number
+    type: object
+  internal_patient.CreatePatientRequest:
+    properties:
+      address:
+        type: string
+      blood_type:
+        type: string
+      city:
+        type: string
+      country:
+        type: string
+      date_of_birth:
+        type: string
+      email:
+        type: string
+      emergency_contact:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.EmergencyContact'
+      first_name:
+        type: string
+      gender:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Gender'
+      insurance:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Insurance'
+      language:
+        type: string
+      last_name:
+        type: string
+      marital_status:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.MaritalStatus'
+      middle_name:
+        type: string
+      mobile_number:
+        type: string
+      nationality:
+        type: string
+      occupation:
+        type: string
+      passport_number:
+        type: string
+      phone_number:
+        type: string
+      religion:
+        type: string
+      ssn:
+        type: string
+      state:
+        type: string
+      zip_code:
+        type: string
+    required:
+    - date_of_birth
+    - first_name
+    - gender
+    - last_name
+    type: object
+  internal_scheduling.CreateAppointmentRequest:
+    properties:
+      appointment_type:
+        $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.AppointmentType'
+      department:
+        type: string
+      duration:
+        description: in minutes
+        type: integer
+      location:
+        type: string
+      notes:
+        type: string
+      patient_id:
+        type: string
+      provider_id:
+        type: string
+      reason_for_visit:
+        type: string
+      room:
+        type: string
+      start_time:
+        type: string
+    required:
+    - appointment_type
+    - duration
+    - patient_id
+    - provider_id
+    - start_time
+    type: object
+  internal_scheduling.TimeSlot:
+    properties:
+      available:
+        type: boolean
+      end_time:
+        type: string
+      start_time:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@hospital-emr.com
+    name: API Support
+  description: Comprehensive Electronic Medical Record system for hospitals
+  license:
+    name: Proprietary
+    url: http://www.hospital-emr.com/license
+  termsOfService: http://swagger.io/terms/
+  title: Hospital EMR System API
+  version: "1.0"
+paths:
+  /api/v1/appointments:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of appointments
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Filter by patient ID
+        in: query
+        name: patient_id
+        type: string
+      - description: Filter by provider ID
+        in: query
+        name: provider_id
+        type: string
+      - description: Filter by status
+        in: query
+        name: status
+        type: string
+      - description: Filter by date (YYYY-MM-DD)
+        in: query
+        name: date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List appointments
+      tags:
+      - appointments
+    post:
+      consumes:
+      - application/json
+      description: Schedule a new appointment for a patient
+      parameters:
+      - description: Appointment information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_scheduling.CreateAppointmentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Appointment'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Create a new appointment
+      tags:
+      - appointments
+  /api/v1/appointments/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about an appointment
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Appointment'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Get appointment by ID
+      tags:
+      - appointments
+    put:
+      consumes:
+      - application/json
+      description: Update appointment information
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Appointment information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_scheduling.CreateAppointmentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Appointment'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Update appointment
+      tags:
+      - appointments
+  /api/v1/appointments/{id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: Cancel an appointment
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Cancellation reason
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Cancel appointment
+      tags:
+      - appointments
+  /api/v1/appointments/{id}/checkin:
+    post:
+      consumes:
+      - application/json
+      description: Mark appointment as checked in
+      parameters:
+      - description: Appointment ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Check in appointment
+      tags:
+      - appointments
+  /api/v1/appointments/availability:
+    get:
+      consumes:
+      - application/json
+      description: Get available time slots for a provider (alias for GetProviderAvailability)
+      parameters:
+      - description: Provider ID
+        in: query
+        name: provider_id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_scheduling.TimeSlot'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Get general availability
+      tags:
+      - appointments
+  /api/v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_auth.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      summary: User login
+      tags:
+      - auth
+  /api/v1/auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user and invalidate session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: User logout
+      tags:
+      - auth
+  /api/v1/auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Get a new access token using refresh token
+      parameters:
+      - description: Refresh token
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_auth.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      summary: Refresh access token
+      tags:
+      - auth
+  /api/v1/auth/verify:
+    get:
+      consumes:
+      - application/json
+      description: Verify if the provided token is valid
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Verify JWT token
+      tags:
+      - auth
+  /api/v1/encounters:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of encounters
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Filter by patient ID
+        in: query
+        name: patient_id
+        type: string
+      - description: Filter by provider ID
+        in: query
+        name: provider_id
+        type: string
+      - description: Filter by status
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List encounters
+      tags:
+      - encounters
+    post:
+      consumes:
+      - application/json
+      description: Create a new clinical encounter for a patient
+      parameters:
+      - description: Encounter information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_encounter.CreateEncounterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Encounter'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Create a new encounter
+      tags:
+      - encounters
+  /api/v1/encounters/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about an encounter
+      parameters:
+      - description: Encounter ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Encounter'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Get encounter by ID
+      tags:
+      - encounters
+  /api/v1/encounters/{id}/complete:
+    post:
+      consumes:
+      - application/json
+      description: Mark an encounter as completed
+      parameters:
+      - description: Encounter ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Encounter'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Complete encounter
+      tags:
+      - encounters
+  /api/v1/encounters/{id}/diagnoses:
+    post:
+      consumes:
+      - application/json
+      description: Add a diagnosis to an encounter
+      parameters:
+      - description: Encounter ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Diagnosis
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_encounter.AddDiagnosisRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Diagnosis'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Add diagnosis
+      tags:
+      - encounters
+  /api/v1/encounters/{id}/notes:
+    post:
+      consumes:
+      - application/json
+      description: Add a clinical note to an encounter
+      parameters:
+      - description: Encounter ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Clinical note
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_encounter.AddClinicalNoteRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.ClinicalNote'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Add clinical note
+      tags:
+      - encounters
+  /api/v1/encounters/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Update the status of an encounter
+      parameters:
+      - description: Encounter ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Status update
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Encounter'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Update encounter status
+      tags:
+      - encounters
+  /api/v1/encounters/{id}/vitals:
+    post:
+      consumes:
+      - application/json
+      description: Record vital signs for an encounter
+      parameters:
+      - description: Encounter ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Vital signs
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_encounter.RecordVitalSignsRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.VitalSign'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Record vital signs
+      tags:
+      - encounters
+  /api/v1/patients:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of patients
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 20
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List patients
+      tags:
+      - patients
+    post:
+      consumes:
+      - application/json
+      description: Register a new patient in the system
+      parameters:
+      - description: Patient information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_patient.CreatePatientRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Patient'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Create a new patient
+      tags:
+      - patients
+  /api/v1/patients/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft delete a patient
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Delete patient
+      tags:
+      - patients
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a patient
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Patient'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Get patient by ID
+      tags:
+      - patients
+    put:
+      consumes:
+      - application/json
+      description: Update patient information
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Patient information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_patient.CreatePatientRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_models.Patient'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Update patient
+      tags:
+      - patients
+  /api/v1/patients/{id}/timeline:
+    get:
+      consumes:
+      - application/json
+      description: Get complete medical timeline for a patient
+      parameters:
+      - description: Patient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Get patient timeline
+      tags:
+      - patients
+  /api/v1/providers/{id}/availability:
+    get:
+      consumes:
+      - application/json
+      description: Get available time slots for a provider on a specific date
+      parameters:
+      - description: Provider ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Date (YYYY-MM-DD)
+        in: query
+        name: date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/internal_scheduling.TimeSlot'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError'
+      security:
+      - BearerAuth: []
+      summary: Get provider availability
+      tags:
+      - appointments
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

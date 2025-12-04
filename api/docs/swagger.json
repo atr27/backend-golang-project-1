@@ -1,0 +1,3085 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Comprehensive Electronic Medical Record system for hospitals",
+        "title": "Hospital EMR System API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "support@hospital-emr.com"
+        },
+        "license": {
+            "name": "Proprietary",
+            "url": "http://www.hospital-emr.com/license"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/v1/appointments": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get a paginated list of appointments",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "List appointments",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by patient ID",
+                        "name": "patient_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by provider ID",
+                        "name": "provider_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by date (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Schedule a new appointment for a patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Create a new appointment",
+                "parameters": [
+                    {
+                        "description": "Appointment information",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_scheduling.CreateAppointmentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Appointment"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/availability": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get available time slots for a provider (alias for GetProviderAvailability)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Get general availability",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider ID",
+                        "name": "provider_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_scheduling.TimeSlot"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detailed information about an appointment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Get appointment by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Appointment"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update appointment information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Update appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Appointment information",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_scheduling.CreateAppointmentRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Appointment"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/{id}/cancel": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Cancel an appointment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Cancel appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Cancellation reason",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/appointments/{id}/checkin": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mark appointment as checked in",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Check in appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Appointment ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/login": {
+            "post": {
+                "description": "Authenticate user and return JWT tokens",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User login",
+                "parameters": [
+                    {
+                        "description": "Login credentials",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_auth.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_auth.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Logout user and invalidate session",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User logout",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/refresh": {
+            "post": {
+                "description": "Get a new access token using refresh token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh access token",
+                "parameters": [
+                    {
+                        "description": "Refresh token",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal_auth.LoginResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/verify": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Verify if the provided token is valid",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verify JWT token",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.User"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get a paginated list of encounters",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "List encounters",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by patient ID",
+                        "name": "patient_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by provider ID",
+                        "name": "provider_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new clinical encounter for a patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Create a new encounter",
+                "parameters": [
+                    {
+                        "description": "Encounter information",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_encounter.CreateEncounterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Encounter"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detailed information about an encounter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Get encounter by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Encounter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Encounter"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters/{id}/complete": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Mark an encounter as completed",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Complete encounter",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Encounter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Encounter"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters/{id}/diagnoses": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add a diagnosis to an encounter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Add diagnosis",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Encounter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Diagnosis",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_encounter.AddDiagnosisRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Diagnosis"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters/{id}/notes": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Add a clinical note to an encounter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Add clinical note",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Encounter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Clinical note",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_encounter.AddClinicalNoteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.ClinicalNote"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters/{id}/status": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the status of an encounter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Update encounter status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Encounter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Status update",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Encounter"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/encounters/{id}/vitals": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Record vital signs for an encounter",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "encounters"
+                ],
+                "summary": "Record vital signs",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Encounter ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Vital signs",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_encounter.RecordVitalSignsRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.VitalSign"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/patients": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get a paginated list of patients",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patients"
+                ],
+                "summary": "List patients",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 20,
+                        "description": "Page size",
+                        "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search term",
+                        "name": "search",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Register a new patient in the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Create a new patient",
+                "parameters": [
+                    {
+                        "description": "Patient information",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_patient.CreatePatientRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Patient"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/patients/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get detailed information about a patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Get patient by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Patient"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update patient information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Update patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Patient information",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_patient.CreatePatientRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Patient"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Soft delete a patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Delete patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/patients/{id}/timeline": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get complete medical timeline for a patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "patients"
+                ],
+                "summary": "Get patient timeline",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/providers/{id}/availability": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get available time slots for a provider on a specific date",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "appointments"
+                ],
+                "summary": "Get provider availability",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Provider ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Date (YYYY-MM-DD)",
+                        "name": "date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_scheduling.TimeSlot"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_hospital-emr_backend_internal_common_errors.AppError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_hospital-emr_backend_internal_common_errors.AppError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "details": {},
+                "message": {
+                    "type": "string"
+                },
+                "status_code": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.Allergy": {
+            "type": "object",
+            "properties": {
+                "allergen": {
+                    "type": "string"
+                },
+                "allergy_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.AllergyType"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "onset_date": {
+                    "type": "string"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "reaction": {
+                    "type": "string"
+                },
+                "severity": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.AllergySeverity"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.AllergySeverity": {
+            "type": "string",
+            "enum": [
+                "mild",
+                "moderate",
+                "severe",
+                "fatal"
+            ],
+            "x-enum-varnames": [
+                "AllergySeverityMild",
+                "AllergySeverityModerate",
+                "AllergySeveritySevere",
+                "AllergySeverityFatal"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.AllergyType": {
+            "type": "string",
+            "enum": [
+                "drug",
+                "food",
+                "environment",
+                "other"
+            ],
+            "x-enum-varnames": [
+                "AllergyTypeDrug",
+                "AllergyTypeFood",
+                "AllergyTypeEnvironment",
+                "AllergyTypeOther"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Appointment": {
+            "type": "object",
+            "properties": {
+                "appointment_number": {
+                    "type": "string"
+                },
+                "appointment_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.AppointmentType"
+                },
+                "cancellation_reason": {
+                    "type": "string"
+                },
+                "cancelled_at": {
+                    "type": "string"
+                },
+                "checked_in_at": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "department": {
+                    "type": "string"
+                },
+                "duration": {
+                    "description": "in minutes",
+                    "type": "integer"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "patient": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Patient"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "provider": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.User"
+                },
+                "provider_id": {
+                    "type": "string"
+                },
+                "reason_for_visit": {
+                    "type": "string"
+                },
+                "reminder_sent": {
+                    "type": "boolean"
+                },
+                "reminder_sent_at": {
+                    "type": "string"
+                },
+                "room": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.AppointmentStatus"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.AppointmentStatus": {
+            "type": "string",
+            "enum": [
+                "scheduled",
+                "confirmed",
+                "checked_in",
+                "in_progress",
+                "completed",
+                "cancelled",
+                "no_show"
+            ],
+            "x-enum-varnames": [
+                "AppointmentStatusScheduled",
+                "AppointmentStatusConfirmed",
+                "AppointmentStatusCheckedIn",
+                "AppointmentStatusInProgress",
+                "AppointmentStatusCompleted",
+                "AppointmentStatusCancelled",
+                "AppointmentStatusNoShow"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.AppointmentType": {
+            "type": "string",
+            "enum": [
+                "consultation",
+                "follow_up",
+                "wellness",
+                "procedure",
+                "emergency",
+                "telehealth"
+            ],
+            "x-enum-varnames": [
+                "AppointmentTypeConsultation",
+                "AppointmentTypeFollowUp",
+                "AppointmentTypeWellness",
+                "AppointmentTypeProcedure",
+                "AppointmentTypeEmergency",
+                "AppointmentTypeTelehealth"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.ClinicalNote": {
+            "type": "object",
+            "properties": {
+                "assessment": {
+                    "description": "A - Assessment",
+                    "type": "string"
+                },
+                "author": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.User"
+                },
+                "author_id": {
+                    "type": "string"
+                },
+                "content": {
+                    "description": "General content",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "encounter_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "note_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.NoteType"
+                },
+                "objective": {
+                    "description": "O - Objective",
+                    "type": "string"
+                },
+                "plan": {
+                    "description": "P - Plan",
+                    "type": "string"
+                },
+                "signed_at": {
+                    "type": "string"
+                },
+                "signed_by": {
+                    "type": "string"
+                },
+                "subjective": {
+                    "description": "S - Subjective",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.Diagnosis": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "diagnosed_by": {
+                    "type": "string"
+                },
+                "diagnosis_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.DiagnosisType"
+                },
+                "encounter_id": {
+                    "type": "string"
+                },
+                "icd10_code": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "onset_date": {
+                    "type": "string"
+                },
+                "resolved_date": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.DiagnosisType": {
+            "type": "string",
+            "enum": [
+                "primary",
+                "secondary",
+                "differential"
+            ],
+            "x-enum-varnames": [
+                "DiagnosisTypePrimary",
+                "DiagnosisTypeSecondary",
+                "DiagnosisTypeDifferential"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.EmergencyContact": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "relationship": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.Encounter": {
+            "type": "object",
+            "properties": {
+                "admission_date": {
+                    "type": "string"
+                },
+                "chief_complaint": {
+                    "type": "string"
+                },
+                "clinical_notes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.ClinicalNote"
+                    }
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "department": {
+                    "type": "string"
+                },
+                "diagnoses": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Diagnosis"
+                    }
+                },
+                "discharge_date": {
+                    "type": "string"
+                },
+                "encounter_number": {
+                    "type": "string"
+                },
+                "encounter_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.EncounterType"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Order"
+                    }
+                },
+                "patient": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Patient"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "priority": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Priority"
+                },
+                "procedures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Procedure"
+                    }
+                },
+                "provider": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.User"
+                },
+                "provider_id": {
+                    "type": "string"
+                },
+                "reason_for_visit": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.EncounterStatus"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "vital_signs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.VitalSign"
+                    }
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.EncounterStatus": {
+            "type": "string",
+            "enum": [
+                "scheduled",
+                "in_progress",
+                "completed",
+                "cancelled"
+            ],
+            "x-enum-varnames": [
+                "EncounterStatusScheduled",
+                "EncounterStatusInProgress",
+                "EncounterStatusCompleted",
+                "EncounterStatusCancelled"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.EncounterType": {
+            "type": "string",
+            "enum": [
+                "outpatient",
+                "inpatient",
+                "emergency",
+                "wellness",
+                "telehealth"
+            ],
+            "x-enum-varnames": [
+                "EncounterTypeOutpatient",
+                "EncounterTypeInpatient",
+                "EncounterTypeEmergency",
+                "EncounterTypeWellness",
+                "EncounterTypeTelehealth"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Gender": {
+            "type": "string",
+            "enum": [
+                "male",
+                "female",
+                "other",
+                "unknown"
+            ],
+            "x-enum-varnames": [
+                "GenderMale",
+                "GenderFemale",
+                "GenderOther",
+                "GenderUnknown"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Insurance": {
+            "type": "object",
+            "properties": {
+                "coverage_type": {
+                    "type": "string"
+                },
+                "expiry_date": {
+                    "type": "string"
+                },
+                "group_number": {
+                    "type": "string"
+                },
+                "policy_number": {
+                    "type": "string"
+                },
+                "primary_insured": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.LabResult": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "flag": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.ResultFlag"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "lab_test_id": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "parameter_name": {
+                    "type": "string"
+                },
+                "reference_range": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                },
+                "verified_at": {
+                    "type": "string"
+                },
+                "verified_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.LabTest": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "order_id": {
+                    "type": "string"
+                },
+                "results": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.LabResult"
+                    }
+                },
+                "results_available_at": {
+                    "type": "string"
+                },
+                "sample_collected_at": {
+                    "type": "string"
+                },
+                "sample_type": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.OrderStatus"
+                },
+                "test_code": {
+                    "description": "LOINC code",
+                    "type": "string"
+                },
+                "test_name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.MaritalStatus": {
+            "type": "string",
+            "enum": [
+                "single",
+                "married",
+                "divorced",
+                "widowed"
+            ],
+            "x-enum-varnames": [
+                "MaritalStatusSingle",
+                "MaritalStatusMarried",
+                "MaritalStatusDivorced",
+                "MaritalStatusWidowed"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Medication": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "dosage": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "frequency": {
+                    "type": "string"
+                },
+                "generic_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "string"
+                },
+                "medication_name": {
+                    "type": "string"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "prescribed_by": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "refills_remaining": {
+                    "type": "integer"
+                },
+                "route": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.NoteType": {
+            "type": "string",
+            "enum": [
+                "soap",
+                "progress",
+                "consult",
+                "discharge",
+                "procedure"
+            ],
+            "x-enum-varnames": [
+                "NoteTypeSOAP",
+                "NoteTypeProgress",
+                "NoteTypeConsult",
+                "NoteTypeDischarge",
+                "NoteTypeProcedure"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Order": {
+            "type": "object",
+            "properties": {
+                "cancel_reason": {
+                    "type": "string"
+                },
+                "cancelled_at": {
+                    "type": "string"
+                },
+                "clinical_notes": {
+                    "type": "string"
+                },
+                "completed_at": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "encounter": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Encounter"
+                },
+                "encounter_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "string"
+                },
+                "lab_tests": {
+                    "description": "Lab Order specific fields",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.LabTest"
+                    }
+                },
+                "order_number": {
+                    "type": "string"
+                },
+                "order_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.OrderType"
+                },
+                "ordered_at": {
+                    "type": "string"
+                },
+                "ordered_by": {
+                    "type": "string"
+                },
+                "patient": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Patient"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "prescriptions": {
+                    "description": "Prescription specific fields",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Prescription"
+                    }
+                },
+                "priority": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Priority"
+                },
+                "radiology_exams": {
+                    "description": "Radiology Order specific fields",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.RadiologyExam"
+                    }
+                },
+                "scheduled_for": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.OrderStatus"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.OrderStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "scheduled",
+                "in_progress",
+                "completed",
+                "cancelled",
+                "on_hold"
+            ],
+            "x-enum-varnames": [
+                "OrderStatusPending",
+                "OrderStatusScheduled",
+                "OrderStatusInProgress",
+                "OrderStatusCompleted",
+                "OrderStatusCancelled",
+                "OrderStatusOnHold"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.OrderType": {
+            "type": "string",
+            "enum": [
+                "lab",
+                "radiology",
+                "prescription",
+                "procedure"
+            ],
+            "x-enum-varnames": [
+                "OrderTypeLab",
+                "OrderTypeRadiology",
+                "OrderTypePrescription",
+                "OrderTypeProcedure"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Patient": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "allergies": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Allergy"
+                    }
+                },
+                "appointments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Appointment"
+                    }
+                },
+                "blood_type": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "date_of_birth": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "emergency_contact": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.EmergencyContact"
+                },
+                "encounters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Encounter"
+                    }
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Gender"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "insurance": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Insurance"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "marital_status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.MaritalStatus"
+                },
+                "medications": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Medication"
+                    }
+                },
+                "middle_name": {
+                    "type": "string"
+                },
+                "mobile_number": {
+                    "type": "string"
+                },
+                "mrn": {
+                    "description": "Medical Record Number",
+                    "type": "string"
+                },
+                "nationality": {
+                    "type": "string"
+                },
+                "occupation": {
+                    "type": "string"
+                },
+                "passport_number": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "profile_photo": {
+                    "type": "string"
+                },
+                "religion": {
+                    "type": "string"
+                },
+                "ssn": {
+                    "description": "Social Security Number / National ID",
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.PatientStatus"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "zip_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.PatientStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "inactive",
+                "deceased"
+            ],
+            "x-enum-varnames": [
+                "PatientStatusActive",
+                "PatientStatusInactive",
+                "PatientStatusDeceased"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Permission": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "resource": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.Prescription": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "dispensed_at": {
+                    "type": "string"
+                },
+                "dispensed_by": {
+                    "type": "string"
+                },
+                "dosage": {
+                    "type": "string"
+                },
+                "drug_code": {
+                    "description": "RxNorm code",
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "frequency": {
+                    "type": "string"
+                },
+                "generic_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "instructions": {
+                    "type": "string"
+                },
+                "medication_name": {
+                    "type": "string"
+                },
+                "order_id": {
+                    "type": "string"
+                },
+                "pharmacy_id": {
+                    "type": "string"
+                },
+                "prescribed_at": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "refills": {
+                    "type": "integer"
+                },
+                "route": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.PrescriptionStatus"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.PrescriptionStatus": {
+            "type": "string",
+            "enum": [
+                "pending",
+                "active",
+                "dispensed",
+                "completed",
+                "cancelled",
+                "expired"
+            ],
+            "x-enum-varnames": [
+                "PrescriptionStatusPending",
+                "PrescriptionStatusActive",
+                "PrescriptionStatusDispensed",
+                "PrescriptionStatusCompleted",
+                "PrescriptionStatusCancelled",
+                "PrescriptionStatusExpired"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Priority": {
+            "type": "string",
+            "enum": [
+                "routine",
+                "urgent",
+                "emergent"
+            ],
+            "x-enum-varnames": [
+                "PriorityRoutine",
+                "PriorityUrgent",
+                "PriorityEmergent"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Procedure": {
+            "type": "object",
+            "properties": {
+                "complications": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "duration": {
+                    "description": "in minutes",
+                    "type": "integer"
+                },
+                "encounter_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "performed_at": {
+                    "type": "string"
+                },
+                "performed_by": {
+                    "type": "string"
+                },
+                "procedure_code": {
+                    "description": "CPT code",
+                    "type": "string"
+                },
+                "procedure_name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.RadiologyExam": {
+            "type": "object",
+            "properties": {
+                "body_part": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "dicom_study_uid": {
+                    "type": "string"
+                },
+                "exam_code": {
+                    "description": "CPT code",
+                    "type": "string"
+                },
+                "exam_name": {
+                    "type": "string"
+                },
+                "findings": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "impression": {
+                    "type": "string"
+                },
+                "modality": {
+                    "description": "X-Ray, CT, MRI, Ultrasound",
+                    "type": "string"
+                },
+                "order_id": {
+                    "type": "string"
+                },
+                "performed_at": {
+                    "type": "string"
+                },
+                "radiologist": {
+                    "type": "string"
+                },
+                "reported_at": {
+                    "type": "string"
+                },
+                "scheduled_at": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.OrderStatus"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.ResultFlag": {
+            "type": "string",
+            "enum": [
+                "normal",
+                "high",
+                "low",
+                "critical",
+                "abnormal"
+            ],
+            "x-enum-varnames": [
+                "ResultFlagNormal",
+                "ResultFlagHigh",
+                "ResultFlagLow",
+                "ResultFlagCritical",
+                "ResultFlagAbnormal"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.Role": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "is_active": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Permission"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.User": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "department": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_login_at": {
+                    "type": "string"
+                },
+                "last_login_ip": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "license_number": {
+                    "type": "string"
+                },
+                "mfa_enabled": {
+                    "type": "boolean"
+                },
+                "password_expiry": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Role"
+                    }
+                },
+                "specialty": {
+                    "type": "string"
+                },
+                "status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.UserStatus"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "github_com_hospital-emr_backend_internal_models.UserStatus": {
+            "type": "string",
+            "enum": [
+                "active",
+                "inactive",
+                "suspended",
+                "locked"
+            ],
+            "x-enum-varnames": [
+                "UserStatusActive",
+                "UserStatusInactive",
+                "UserStatusSuspended",
+                "UserStatusLocked"
+            ]
+        },
+        "github_com_hospital-emr_backend_internal_models.VitalSign": {
+            "type": "object",
+            "properties": {
+                "blood_pressure_diastolic": {
+                    "description": "mmHg",
+                    "type": "integer"
+                },
+                "blood_pressure_systolic": {
+                    "description": "mmHg",
+                    "type": "integer"
+                },
+                "bmi": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "created_by": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "$ref": "#/definitions/gorm.DeletedAt"
+                },
+                "encounter_id": {
+                    "type": "string"
+                },
+                "heart_rate": {
+                    "description": "bpm",
+                    "type": "integer"
+                },
+                "height": {
+                    "description": "cm",
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "measured_at": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "oxygen_saturation": {
+                    "description": "%",
+                    "type": "number"
+                },
+                "pain": {
+                    "description": "0-10 scale",
+                    "type": "integer"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "recorded_by": {
+                    "type": "string"
+                },
+                "respiratory_rate": {
+                    "description": "breaths/min",
+                    "type": "integer"
+                },
+                "temperature": {
+                    "description": "Celsius",
+                    "type": "number"
+                },
+                "temperature_unit": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "updated_by": {
+                    "type": "string"
+                },
+                "weight": {
+                    "description": "kg",
+                    "type": "number"
+                }
+            }
+        },
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "internal_auth.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "mfa_code": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_auth.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "expires_in": {
+                    "type": "integer"
+                },
+                "mfa_required": {
+                    "type": "boolean"
+                },
+                "refresh_token": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.User"
+                }
+            }
+        },
+        "internal_encounter.AddClinicalNoteRequest": {
+            "type": "object",
+            "required": [
+                "note_type"
+            ],
+            "properties": {
+                "assessment": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "note_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.NoteType"
+                },
+                "objective": {
+                    "type": "string"
+                },
+                "plan": {
+                    "type": "string"
+                },
+                "subjective": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_encounter.AddDiagnosisRequest": {
+            "type": "object",
+            "required": [
+                "description",
+                "diagnosis_type",
+                "icd10_code"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "diagnosis_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.DiagnosisType"
+                },
+                "icd10_code": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "onset_date": {
+                    "type": "string"
+                },
+                "severity": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_encounter.CreateEncounterRequest": {
+            "type": "object",
+            "required": [
+                "admission_date",
+                "encounter_type",
+                "patient_id",
+                "provider_id"
+            ],
+            "properties": {
+                "admission_date": {
+                    "type": "string"
+                },
+                "chief_complaint": {
+                    "type": "string"
+                },
+                "department": {
+                    "type": "string"
+                },
+                "encounter_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.EncounterType"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "priority": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Priority"
+                },
+                "provider_id": {
+                    "type": "string"
+                },
+                "reason_for_visit": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_encounter.RecordVitalSignsRequest": {
+            "type": "object",
+            "properties": {
+                "blood_pressure_diastolic": {
+                    "type": "integer"
+                },
+                "blood_pressure_systolic": {
+                    "type": "integer"
+                },
+                "heart_rate": {
+                    "type": "integer"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "oxygen_saturation": {
+                    "type": "number"
+                },
+                "pain": {
+                    "type": "integer"
+                },
+                "respiratory_rate": {
+                    "type": "integer"
+                },
+                "temperature": {
+                    "type": "number"
+                },
+                "temperature_unit": {
+                    "type": "string"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            }
+        },
+        "internal_patient.CreatePatientRequest": {
+            "type": "object",
+            "required": [
+                "date_of_birth",
+                "first_name",
+                "gender",
+                "last_name"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "blood_type": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "date_of_birth": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "emergency_contact": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.EmergencyContact"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "gender": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Gender"
+                },
+                "insurance": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.Insurance"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "marital_status": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.MaritalStatus"
+                },
+                "middle_name": {
+                    "type": "string"
+                },
+                "mobile_number": {
+                    "type": "string"
+                },
+                "nationality": {
+                    "type": "string"
+                },
+                "occupation": {
+                    "type": "string"
+                },
+                "passport_number": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "religion": {
+                    "type": "string"
+                },
+                "ssn": {
+                    "type": "string"
+                },
+                "state": {
+                    "type": "string"
+                },
+                "zip_code": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_scheduling.CreateAppointmentRequest": {
+            "type": "object",
+            "required": [
+                "appointment_type",
+                "duration",
+                "patient_id",
+                "provider_id",
+                "start_time"
+            ],
+            "properties": {
+                "appointment_type": {
+                    "$ref": "#/definitions/github_com_hospital-emr_backend_internal_models.AppointmentType"
+                },
+                "department": {
+                    "type": "string"
+                },
+                "duration": {
+                    "description": "in minutes",
+                    "type": "integer"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "patient_id": {
+                    "type": "string"
+                },
+                "provider_id": {
+                    "type": "string"
+                },
+                "reason_for_visit": {
+                    "type": "string"
+                },
+                "room": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                }
+            }
+        },
+        "internal_scheduling.TimeSlot": {
+            "type": "object",
+            "properties": {
+                "available": {
+                    "type": "boolean"
+                },
+                "end_time": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
