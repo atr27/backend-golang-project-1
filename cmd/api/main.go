@@ -75,13 +75,18 @@ func main() {
 	}
 
 	// Connect to NATS
-	natsClient, err := messaging.NewNATSClient(cfg.NATS.URL)
-	if err != nil {
-		logger.Warnf("Failed to connect to NATS: %v", err)
-		// Continue without NATS for now
+	var natsClient *messaging.NATSClient
+	if cfg.NATS.URL != "" {
+		natsClient, err = messaging.NewNATSClient(cfg.NATS.URL)
+		if err != nil {
+			logger.Warnf("Failed to connect to NATS: %v", err)
+			// Continue without NATS for now
+		} else {
+			defer natsClient.Close()
+			logger.Info("Connected to NATS successfully")
+		}
 	} else {
-		defer natsClient.Close()
-		logger.Info("Connected to NATS successfully")
+		logger.Info("NATS URL not provided, skipping NATS connection")
 	}
 
 	// Initialize services

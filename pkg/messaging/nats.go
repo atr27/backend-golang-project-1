@@ -24,6 +24,10 @@ func NewNATSClient(url string) (*NATSClient, error) {
 
 // Publish publishes a message to a subject
 func (c *NATSClient) Publish(subject string, data interface{}) error {
+	if c == nil || c.conn == nil {
+		return nil
+	}
+
 	jsonData, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -34,6 +38,10 @@ func (c *NATSClient) Publish(subject string, data interface{}) error {
 
 // Subscribe subscribes to a subject
 func (c *NATSClient) Subscribe(subject string, handler func([]byte)) (*nats.Subscription, error) {
+	if c == nil || c.conn == nil {
+		return nil, fmt.Errorf("NATS client not connected")
+	}
+
 	return c.conn.Subscribe(subject, func(msg *nats.Msg) {
 		handler(msg.Data)
 	})
@@ -41,6 +49,10 @@ func (c *NATSClient) Subscribe(subject string, handler func([]byte)) (*nats.Subs
 
 // QueueSubscribe subscribes to a subject with queue group
 func (c *NATSClient) QueueSubscribe(subject, queue string, handler func([]byte)) (*nats.Subscription, error) {
+	if c == nil || c.conn == nil {
+		return nil, fmt.Errorf("NATS client not connected")
+	}
+
 	return c.conn.QueueSubscribe(subject, queue, func(msg *nats.Msg) {
 		handler(msg.Data)
 	})
@@ -48,7 +60,7 @@ func (c *NATSClient) QueueSubscribe(subject, queue string, handler func([]byte))
 
 // Close closes the NATS connection
 func (c *NATSClient) Close() {
-	if c.conn != nil {
+	if c != nil && c.conn != nil {
 		c.conn.Close()
 	}
 }

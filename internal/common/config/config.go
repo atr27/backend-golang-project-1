@@ -152,7 +152,7 @@ func Load() (*Config, error) {
 			DB:       getEnvAsInt("REDIS_DB", 0),
 		},
 		NATS: NATSConfig{
-			URL:       getEnv("NATS_URL", "nats://localhost:4222"),
+			URL:       getEnv("NATS_URL", ""),
 			ClusterID: getEnv("NATS_CLUSTER_ID", "emr-cluster"),
 		},
 		CORS: CORSConfig{
