@@ -161,6 +161,9 @@ func setupRouter(cfg *config.Config, authHandler *auth.Handler, patientHandler *
 
 	// Health check endpoints
 	router.GET("/health", healthCheck)
+	// Aliases for Leapcell default probes to prevent 404s
+	router.GET("/kaithhealthcheck", healthCheck)
+	router.GET("/kaithheathcheck", healthCheck) // Handle likely typo in probe
 	router.GET("/ready", readyCheck)
 
 	// API v1 routes
