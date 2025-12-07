@@ -69,10 +69,12 @@ func main() {
 	}
 	defer db.Close()
 
-	// Auto-migrate database models
-	if err := autoMigrate(db); err != nil {
-		logger.Fatalf("Failed to migrate database: %v", err)
-	}
+	// Auto-migrate database models in background to avoid blocking startup
+	go func() {
+		if err := autoMigrate(db); err != nil {
+			logger.Errorf("Failed to migrate database: %v", err)
+		}
+	}()
 
 	// Connect to NATS
 	var natsClient *messaging.NATSClient
