@@ -156,7 +156,7 @@ func Load() (*Config, error) {
 			ClusterID: getEnv("NATS_CLUSTER_ID", "emr-cluster"),
 		},
 		CORS: CORSConfig{
-			AllowedOrigins: getEnvAsSlice("CORS_ALLOWED_ORIGINS", []string{"http://localhost:3000", "https://frontend-hospital-eight.vercel.app"}),
+			AllowedOrigins: getEnvAsSlice("CORS_ALLOWED_ORIGINS", []string{"http://localhost:3000", "https://frontend-hospital-gules.vercel.app"}),
 			AllowedMethods: getEnvAsSlice("CORS_ALLOWED_METHODS", []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"}),
 			AllowedHeaders: getEnvAsSlice("CORS_ALLOWED_HEADERS", []string{"Origin", "Content-Type", "Accept", "Authorization"}),
 		},
